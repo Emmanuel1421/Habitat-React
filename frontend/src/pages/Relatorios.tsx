@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCasos } from '@/contexts/CasosContext';
-import { mockUsers } from '@/data/mockData';
+import { useUsers } from '@/hooks/useUsers';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const statusLabels: Record<string, string> = {
@@ -12,6 +12,7 @@ const statusColors = ['#8B95A5', '#EAB308', '#3B82F6', '#22C55E'];
 const Relatorios = () => {
   const { user } = useAuth();
   const { casos } = useCasos();
+  const { users } = useUsers();
 
   const filtered = casos.filter(c => {
     if (user?.role === 'master') return true;
@@ -23,14 +24,14 @@ const Relatorios = () => {
     name: statusLabels[s], value: filtered.filter(c => c.status === s).length,
   }));
 
-  const estagiarios = mockUsers.filter(u => u.role === 'estagiario');
+  const estagiarios = users.filter(u => u.role === 'INTERN');
   const byEstagiario = estagiarios.map(e => ({
-    name: e.nome.split(' ')[0], value: filtered.filter(c => c.estagiarioId === e.id).length,
+    name: e.name.split(' ')[0], value: filtered.filter(c => c.estagiarioId === String(e.id)).length,
   }));
 
-  const coordenadores = mockUsers.filter(u => u.role === 'coordenador');
+  const coordenadores = users.filter(u => u.role === 'COORDINATOR');
   const byCoordenador = coordenadores.map(c => ({
-    name: c.nome.split(' ')[0], value: filtered.filter(cs => cs.coordenadorId === c.id).length,
+    name: c.name.split(' ')[0], value: filtered.filter(cs => cs.coordenadorId === String(c.id)).length,
   }));
 
   const finalizados = filtered.filter(c => c.status === 'finalizado');
