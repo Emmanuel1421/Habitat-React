@@ -54,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMINISTRATOR")
                         .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMINISTRATOR", "COORDINATOR", "INTERN")
 
-                        .requestMatchers(HttpMethod.GET, "/associados/**")
+                        .requestMatchers(HttpMethod.GET, "/associates/**")
                         .hasAnyRole("ADMINISTRATOR", "COORDINATOR", "INTERN")
                         .requestMatchers(HttpMethod.GET, "/consultations/**")
                         .hasAnyRole("ADMINISTRATOR", "COORDINATOR", "INTERN")
@@ -63,22 +63,22 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/conciliations/**")
                         .hasAnyRole("ADMINISTRATOR", "COORDINATOR", "INTERN")
 
-                        .requestMatchers(HttpMethod.POST, "/associados/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
-                        .requestMatchers(HttpMethod.PUT, "/associados/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.POST, "/associates/**")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
+                        .requestMatchers(HttpMethod.PUT, "/associates/**")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/consultations/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/consultations/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/processes/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/processes/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.POST, "/conciliations/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
                         .requestMatchers(HttpMethod.PUT, "/conciliations/**")
-                        .hasAnyRole("INTERN", "ADMINISTRATOR")
+                        .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
 
                         .requestMatchers("/documents/**")
                         .hasAnyRole("INTERN", "COORDINATOR", "ADMINISTRATOR")
@@ -96,6 +96,7 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Content-Disposition"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
