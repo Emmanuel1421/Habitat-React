@@ -4,22 +4,34 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { User as UserIcon, Mail, Shield } from 'lucide-react';
+import { User as UserIcon, Mail, Shield, Loader2 } from 'lucide-react';
 
 const Perfil = () => {
   const { user, updateUser } = useAuth();
   const { toast } = useToast();
-  
+
   const [nome, setNome] = useState(user?.nome || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [saving, setSaving] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateUser({ nome, email });
-    toast({ 
-      title: 'Perfil updated', 
-      description: 'Suas informações foram salvas com sucesso.' 
-    });
+    setSaving(true);
+    try {
+      await updateUser({ nome, email });
+      toast({
+        title: 'Perfil atualizado',
+        description: 'Suas informações foram salvas com sucesso.',
+      });
+    } catch (err) {
+      toast({
+        title: 'Erro ao salvar perfil',
+        description: err instanceof Error ? err.message : 'Tente novamente.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSaving(false);
+    }
   };
 
   const roleLabels: Record<string, string> = {
@@ -73,8 +85,8 @@ const Perfil = () => {
           </div>
 
           <div className="pt-4 flex justify-end">
-            <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90">
-              Salvar Alterações
+            <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90" disabled={saving}>
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Salvar Alterações'}
             </Button>
           </div>
         </form>
