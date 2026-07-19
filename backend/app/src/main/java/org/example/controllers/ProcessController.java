@@ -35,7 +35,7 @@ public class ProcessController {
     @GetMapping
     public ResponseEntity<Page<ProcessResponse>> getAll(
             @AuthenticationPrincipal User user,
-            @PageableDefault(size = 20, sort = "createdAT") Pageable pageable) {
+            @PageableDefault(size = 20, sort = "createdAt") Pageable pageable) {
         return ResponseEntity.ok(processService.findAll(user, pageable));
     }
 
