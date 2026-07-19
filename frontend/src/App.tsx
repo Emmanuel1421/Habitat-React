@@ -31,8 +31,16 @@ const MasterRoute = ({ children }: { children: React.ReactNode }) => {
   return user?.role === 'master' ? <>{children}</> : <Navigate to="/dashboard" replace />;
 };
 
+const FullScreenLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <p className="text-sm text-muted-foreground">Carregando...</p>
+  </div>
+);
+
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) return <FullScreenLoader />;
 
   return (
     <Routes>
