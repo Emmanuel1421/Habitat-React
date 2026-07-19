@@ -1,0 +1,28 @@
+import { apiFetch, buildQuery } from '@/lib/api';
+import { AssociateRequest, AssociateResponse, ApiPage, CaseHistoryEntry } from '@/types/api';
+
+export const associateService = {
+  list: (params?: { search?: string; page?: number; size?: number; sort?: string }) =>
+    apiFetch<ApiPage<AssociateResponse>>(
+      `/associates${buildQuery({
+        search: params?.search,
+        page: params?.page ?? 0,
+        size: params?.size ?? 1000,
+        sort: params?.sort,
+      })}`,
+    ),
+
+  getById: (id: number) => apiFetch<AssociateResponse>(`/associates/${id}`),
+
+  byIntern: (internId: number) => apiFetch<AssociateResponse[]>(`/associates/intern/${internId}`),
+
+  create: (data: AssociateRequest) =>
+    apiFetch<AssociateResponse>('/associates', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (id: number, data: AssociateRequest) =>
+    apiFetch<AssociateResponse>(`/associates/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+
+  remove: (id: number) => apiFetch<void>(`/associates/${id}`, { method: 'DELETE' }),
+
+  history: (id: number) => apiFetch<CaseHistoryEntry[]>(`/associates/${id}/history`),
+};
