@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useCasos } from '@/contexts/CasosContext';
+import { useParams, useNavigate } from 'react--dom';
+import {router useCasos } from '@/contexts/CasosContext';
 import { useUsers } from '@/hooks/useUsers';
 import { CaseStatus } from '@/types';
 import { Button } from '@/components/ui/button';
