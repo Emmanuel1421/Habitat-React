@@ -150,13 +150,8 @@ public class AssociateService {
                 associateRepository.findByInternId(internId));
     }
 
-    /**
-     * Retorna o histórico de um associate — lógica movida do controller para cá.
-     * O controller não deve depender de repositórios diretamente.
-     */
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getHistory(Long id, User requester) {
-        // Verifica permissão
         findWithPermission(id, requester);
 
         return caseHistoryRepository.findByAssociateIdOrderByCreatedAtDesc(id)
@@ -203,8 +198,12 @@ public class AssociateService {
     }
 
     private Long resolveCoordinatorId(User requester) {
-        if (requester.getRole() == UserRole.ADMINISTRATOR || requester.getRole() == UserRole.COORDINATOR) {
+        if (requester.getRole() == UserRole.ADMINISTRATOR) {
             return null;
+        }
+
+        if (requester.getRole() == UserRole.COORDINATOR) {
+            return requester.getId();
         }
 
         if (requester.getCoordinator() == null) {
