@@ -1,9 +1,8 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCasos } from '@/contexts/CasosContext';
-import { mockUsers } from '@/data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Briefcase, Clock, CheckCircle2, AlertTriangle, TrendingUp } from 'lucide-react';
+import { Briefcase, Clock, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const statusLabels: Record<string, string> = {
@@ -17,7 +16,7 @@ const statusColors = ['#8B95A5', '#EAB308', '#3B82F6', '#22C55E'];
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { casos } = useCasos();
+  const { casos, loading } = useCasos();
   const navigate = useNavigate();
 
   const filteredCasos = casos.filter(c => {
@@ -47,6 +46,10 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
         <p className="text-sm text-muted-foreground">Bem-vindo(a), {user?.nome}</p>
       </div>
+
+      {loading && casos.length === 0 && (
+        <p className="text-sm text-muted-foreground">Carregando dados...</p>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map(s => (
